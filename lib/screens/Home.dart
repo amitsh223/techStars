@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
 
 Location location = new Location();
@@ -39,7 +40,7 @@ class _HomeState extends State<Home> {
     }
 
     _locationData = await location.getLocation();
-    FirebaseDatabase.instance.reference().child('CustomerData').update(
+    await FirebaseDatabase.instance.reference().child('CustomerData').update(
       {
         'Name': 'Test',
         'Alert': true,
@@ -53,12 +54,25 @@ class _HomeState extends State<Home> {
     ref.listen((event) {
       final response = event.snapshot.value;
       if (response == null) return;
-      if(response['Status']=='Accepted')
-       setState(() {
-      isLoading = false;
+      print(response);
+      if (response['Status'] == 'Accepted') {
+        Fluttertoast.showToast(
+          backgroundColor: Colors.red.withOpacity(0.5),
+            msg: 'Request is  accepted  Please wait for Ambulance ');
+
+             setState(() {
+        isLoading = false;
+      });
+
+      }
+      // } else if (response['Status'] == 'Pending') {
+      //   Fluttertoast.showToast(msg: 'Please wait for the request to approved');
+      // } else {
+      //   return;
+      // }
+     
     });
-    });
-   
+
     print(_locationData);
   }
 
