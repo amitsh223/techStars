@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
@@ -57,20 +58,17 @@ class _HomeState extends State<Home> {
       print(response);
       if (response['Status'] == 'Accepted') {
         Fluttertoast.showToast(
-          backgroundColor: Colors.red.withOpacity(0.5),
+            backgroundColor: Colors.red.withOpacity(0.5),
             msg: 'Request is  accepted  Please wait for Ambulance ');
-
-             setState(() {
-        isLoading = false;
-      });
-
+        setState(() {
+          isLoading = false;
+        });
       }
       // } else if (response['Status'] == 'Pending') {
       //   Fluttertoast.showToast(msg: 'Please wait for the request to approved');
       // } else {
       //   return;
       // }
-     
     });
 
     print(_locationData);
@@ -87,7 +85,7 @@ class _HomeState extends State<Home> {
           actions: [
             FlatButton(
                 onPressed: () {
-                  getLocationWithPermission();
+                  showRating();
                 },
                 child: Icon(Icons.add))
           ],
@@ -124,7 +122,9 @@ class _HomeState extends State<Home> {
                         style: TextStyle(fontSize: 20),
                       ),
                       textColor: Colors.white,
-                      onPressed: () {},
+                      onPressed: () {
+                        getLocationWithPermission();
+                      },
                       color: Colors.red,
                     ),
                   ),
@@ -132,5 +132,82 @@ class _HomeState extends State<Home> {
               ),
       ),
     );
+  }
+
+  Future<void> showRating() {
+    double uRating;
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            actions: [
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel')),
+              FlatButton(
+                  onPressed: () async {
+                    //  final key=  FirebaseDatabase.instance.reference().key;
+                    await FirebaseDatabase.instance
+                        .reference()
+                        .child('Driver')
+                        .push()
+                        .update({'Rating': uRating});
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Submit'))
+            ],
+            title: Text('Please provide your FeedBack'),
+            content: RatingBar(
+              initialRating: 1,
+              itemCount: 5,
+              minRating: 1,
+              glow: true,
+              unratedColor: Colors.grey,
+              // ignore: missing_return
+              itemBuilder: (context, index) {
+                switch (index) {
+                  case 0:
+                    return Icon(
+                      Icons.sentiment_very_dissatisfied,
+                      color: Colors.red,
+                    );
+
+                  case 1:
+                    return Icon(
+                      Icons.sentiment_dissatisfied,
+                      color: Colors.redAccent,
+                    );
+                  case 2:
+                    return Icon(
+                      Icons.sentiment_neutral,
+                      color: Colors.amber,
+                    );
+                  case 3:
+                    return Icon(
+                      Icons.sentiment_satisfied,
+                      color: Colors.lightGreen,
+                    );
+                  case 4:
+                    return Icon(
+                      Icons.sentiment_very_satisfied,
+                      color: Colors.green,
+                    );
+                  case 5:
+                    return Icon(
+                      Icons.sentiment_dissatisfied_outlined,
+                      color: Colors.red,
+                    );
+                }
+              },
+              onRatingUpdate: (rating) {
+                uRating = rating;
+
+                print(rating);
+              },
+            ),
+          );
+        });
   }
 }
