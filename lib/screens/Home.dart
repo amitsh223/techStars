@@ -44,12 +44,21 @@ class _HomeState extends State<Home> {
         'Name': 'Test',
         'Alert': true,
         "lat": _locationData.latitude,
-        'long': _locationData.longitude
+        'long': _locationData.longitude,
+        'Status': 'Pending'
       },
     );
-    setState(() {
+    final ref =
+        FirebaseDatabase.instance.reference().child('CustomerData').onValue;
+    ref.listen((event) {
+      final response = event.snapshot.value;
+      if (response == null) return;
+      if(response['Status']=='Accepted')
+       setState(() {
       isLoading = false;
     });
+    });
+   
     print(_locationData);
   }
 
