@@ -29,6 +29,10 @@ dependencies:
   firebase_database: ^4.0.0
   fluttertoast: ^7.1.1
   flutter_rating_bar: ^3.0.1+1
+  google_maps_flutter: ^0.5.33
+  geolocator: ^5.3.1
+  flutter_polyline_points: ^0.2.1
+  url_launcher: ^5.7.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -51,9 +55,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+assets:
+  - assets/profile.jpg
+  
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
