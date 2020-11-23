@@ -59,9 +59,9 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             Center(
               child: Text(
-                'Home Far From Home',
+                'I   C   E',
                 style: GoogleFonts.poppins(
-                    color: HexColor("2C3448"), fontSize: 23,fontWeight: FontWeight.bold),
+                    color: HexColor("FA163F"), fontSize: 23,fontWeight: FontWeight.bold),
               ),
             )
           ],

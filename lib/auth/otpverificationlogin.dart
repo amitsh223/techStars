@@ -265,7 +265,7 @@ class _OtpVerificationLoginScreenState
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(40),
                       child: Container(
-                        color: HexColor('2c3448'),
+                        color: HexColor('FA163F'),
                         padding: EdgeInsets.symmetric(vertical: 12),
                         child: Center(
                           child: _isLoading

@@ -1,5 +1,3 @@
-
-
 import 'package:customer_app/auth/otpverificationScreen.dart';
 import 'package:customer_app/auth/otpverificationlogin.dart';
 import 'package:customer_app/provider/User.dart';
@@ -53,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 100,
                     width: 200,
                     child: Image.asset(
-                      'assets/main.png',
+                      'assets/logo.png',
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -62,11 +60,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 50,
                 ),
                 Text(
-                  'Welcome to Charlie!',
+                  'Welcome To ICE',
                   style: GoogleFonts.poppins(
                     textStyle: TextStyle(
                       fontSize: 22,
-                      color: HexColor('3A3B3F'),
+                      color: HexColor('FA163F'),
                     ),
                   ),
                 ),
@@ -97,7 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
                               fontSize: 24,
-                              color: HexColor('3A3B3F'),
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
                             ),
                           ),
                         ),
@@ -122,9 +121,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Text(
                           'Register',
                           style: GoogleFonts.poppins(
+                            fontSize: 24,
                             textStyle: TextStyle(
-                              fontSize: 24,
-                              color: HexColor('3A3B3F'),
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
                             ),
                           ),
                         ),
@@ -168,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: GoogleFonts.poppins(
                       textStyle: TextStyle(
                         fontSize: 16,
-                        color: HexColor('3A3B3F'),
+                        color: HexColor('FA163F'),
                       ),
                     ),
                   ),
@@ -178,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextFormField(
                       style: GoogleFonts.poppins(
                         fontSize: 16,
-                        color: HexColor('3A3B3F'),
+                        color: HexColor('FA163F'),
                       ),
                       focusNode: focusNode,
                       keyboardType: TextInputType.phone,
@@ -237,7 +237,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(40),
                 child: Container(
-                  color: HexColor('2c3448'),
+                  color: HexColor('FA163F'),
                   padding: EdgeInsets.symmetric(vertical: 12),
                   child: Center(
                     child: Text(
@@ -318,7 +318,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: GoogleFonts.poppins(
                       textStyle: TextStyle(
                         fontSize: 16,
-                        color: HexColor('3A3B3F'),
+                        color: HexColor('FA163F'),
                       ),
                     ),
                   ),
@@ -328,7 +328,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextFormField(
                       style: GoogleFonts.poppins(
                         fontSize: 16,
-                        color: HexColor('3A3B3F'),
+                        color: HexColor('FA163F'),
                       ),
                       focusNode: focusNode,
                       keyboardType: TextInputType.phone,
@@ -402,7 +402,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: TextFormField(
                 style: GoogleFonts.poppins(
                   fontSize: 16,
-                  color: HexColor('3A3B3F'),
+                  color: HexColor('FA163F'),
                 ),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -467,7 +467,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: TextFormField(
                 style: GoogleFonts.poppins(
                   fontSize: 16,
-                  color: HexColor('3A3B3F'),
+                  color: HexColor('FA163F'),
                 ),
                 keyboardType: TextInputType.text,
                 validator: (value) {
@@ -519,7 +519,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(40),
                 child: Container(
-                  color: HexColor('2c3448'),
+                  color: HexColor('FA163F'),
                   padding: EdgeInsets.symmetric(vertical: 12),
                   child: Center(
                     child: Text(
