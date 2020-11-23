@@ -26,13 +26,18 @@ dependencies:
   http: ^0.12.2
   location: ^3.0.0
   flutter_spinkit: ^4.1.2+1
-  firebase_database: ^4.0.0
+  firebase_database:
   fluttertoast: ^7.1.1
   flutter_rating_bar: ^3.0.1+1
   google_maps_flutter: ^0.5.33
   geolocator: ^5.3.1
   flutter_polyline_points: ^0.2.1
   url_launcher: ^5.7.2
+  firebase_auth: ^0.15.2
+  provider: ^4.3.2+2
+  uuid: ^2.2.2
+  hexcolor: ^1.0.6
+  google_fonts: ^1.1.0
 
 
   # The following adds the Cupertino Icons font to your application.

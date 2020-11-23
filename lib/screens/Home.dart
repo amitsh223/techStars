@@ -1,13 +1,10 @@
-import 'dart:collection';
 
-import 'package:customer_app/map.dart';
 import 'package:customer_app/screens/info.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart';
 import 'package:location/location.dart';
 
 Location location = new Location();

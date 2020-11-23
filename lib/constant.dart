@@ -1,1 +1,1 @@
-final url = 'https://techstars.firebaseio.com/';
+final url = 'https://ambulancetracker-bea10.firebaseio.com/';

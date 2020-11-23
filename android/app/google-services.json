@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "625822546019",
-    "firebase_url": "https://techstars.firebaseio.com",
-    "project_id": "techstars",
-    "storage_bucket": "techstars.appspot.com"
+    "project_number": "511223904093",
+    "firebase_url": "https://ambulancetracker-bea10.firebaseio.com",
+    "project_id": "ambulancetracker-bea10",
+    "storage_bucket": "ambulancetracker-bea10.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:625822546019:android:bb59b32d9291ba7c9fe056",
+        "mobilesdk_app_id": "1:511223904093:android:aedbd64794061a5b4b5ab4",
         "android_client_info": {
           "package_name": "com.example.customer_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "625822546019-1gpl1e98eg3or4nek6i94tob359cbrlo.apps.googleusercontent.com",
+          "client_id": "511223904093-hmjsi4upftrfuutluchfrtb7vdlt8nu4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.customer_app",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "625822546019-572hf8sjnt9eje5v7skjb6ru37b9a5ks.apps.googleusercontent.com",
+          "client_id": "511223904093-q2b3ldh6ehogbek80r8v58kla57g0kgq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCCXMvUmzF2yOCQiTbX0yUS5zQvo7ysBKQ"
+          "current_key": "AIzaSyCpyWl2A7xuQH3AbAS09igu_QR4c8je7aU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "625822546019-572hf8sjnt9eje5v7skjb6ru37b9a5ks.apps.googleusercontent.com",
+              "client_id": "511223904093-q2b3ldh6ehogbek80r8v58kla57g0kgq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
