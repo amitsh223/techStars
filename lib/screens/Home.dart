@@ -1,5 +1,6 @@
-
+import 'package:customer_app/models/hospital.dart';
 import 'package:customer_app/screens/info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -21,6 +22,23 @@ class _HomeState extends State<Home> {
   );
   LocationData _locationData;
   bool _serviceEnabled;
+  List<Hospital> hospitals;
+
+  getAlldata() {
+    final ref =
+        FirebaseDatabase.instance.reference().child('AdminAccess').onValue;
+    ref.listen((event) {
+      final snapShot = event.snapshot.value as Map;
+      if (snapShot != null) {
+        hospitals = [];
+        snapShot.forEach((key, value) {
+          if (value['AproveStatus'])
+            hospitals
+                .add(Hospital(id: key, lat: value['lat'], long: value['long']));
+        });
+      }
+    });
+  }
 
   getLocationWithPermission() async {
     PermissionStatus _permissionGranted;
@@ -41,49 +59,53 @@ class _HomeState extends State<Home> {
         return;
       }
     }
-
-    _locationData = await location.getLocation();
-    await FirebaseDatabase.instance.reference().child('CustomerData').update(
-      {
-        'Name': 'Arun',
-        'Alert': true,
-        "lat": _locationData.latitude,
-        'long': _locationData.longitude,
-        'Status': 'Pending',
-        "Phone no": '8630598001'
-      },
-    );
-    final ref =
-        FirebaseDatabase.instance.reference().child('CustomerData').onValue;
-    ref.listen((event) {
-      final response = event.snapshot.value;
-      if (response == null) return;
-      print(response);
-      if (response['Status'] == 'Accepted') {
-        Fluttertoast.showToast(
-            backgroundColor: Colors.red.withOpacity(0.51),
-            msg: 'Request is  accepted  Please wait for Ambulance ');
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Profile()));
-        setState(() {
-          isLoading = false;
-        });
-      }
-      // } else if (response['Status'] == 'Pending') {
-      //   Fluttertoast.showToast(msg: 'Please wait for the request to approved');
-      // } else {
-      //   return;
-      // }
+    String id;
+    FirebaseAuth.instance.currentUser().then((value) async {
+      id = value.uid;
+      _locationData = await location.getLocation();
+      await FirebaseDatabase.instance
+          .reference()
+          .child('AdminAccess')
+          .child(hospitals.first.id)
+          .child(id)
+          .update(
+        {
+          'id': id,
+          'Alert': true,
+          "lat": _locationData.latitude,
+          'long': _locationData.longitude,
+          'Status': 'Pending',
+          "Phone no": '8630598001'
+        },
+      );
+    }).then((value) {
+      final ref = FirebaseDatabase.instance
+          .reference()
+          .child('AdminAccess')
+          .child(hospitals.first.id)
+          .child(id)
+          .onValue;
+      ref.listen((event) {
+        final response = event.snapshot.value;
+        if (response == null) return;
+        print(response);
+        if (response['Status'] == 'Accepted') {
+          Fluttertoast.showToast(
+              backgroundColor: Colors.red.withOpacity(0.51),
+              msg: 'Request is  accepted  Please wait for Ambulance ');
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => Profile()));
+          setState(() {
+            isLoading = false;
+          });
+        }
+        // } else if (response['Status'] == 'Pending') {
+        //   Fluttertoast.showToast(msg: 'Please wait for the request to approved');
+        // } else {
+        //   return;
+        // }
+      });
     });
-
-    print(_locationData);
-  }
-
-  didChangeDependencies() {
-    // getLocationWithPermission();
-    getProfile();
-    getFeedBack();
-    super.didChangeDependencies();
   }
 
   getFeedBack() {
@@ -113,6 +135,12 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    getAlldata();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -123,8 +151,7 @@ class _HomeState extends State<Home> {
           actions: [
             FlatButton(
                 onPressed: () {
-                   showRating();
-                 
+                  showRating();
                 },
                 child: Icon(Icons.add))
           ],
