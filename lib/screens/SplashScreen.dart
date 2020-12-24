@@ -1,4 +1,3 @@
-
 import 'package:customer_app/auth/LoginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -49,18 +48,34 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * .15,
+              height: MediaQuery.of(context).size.height * .05,
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.4,
-              width: MediaQuery.of(context).size.width * 0.4,
+              height: MediaQuery.of(context).size.height * 0.6,
+              width: MediaQuery.of(context).size.width * 0.6,
               child: Image.asset('assets/logo.png'),
             ),
             Center(
-              child: Text(
-                'I   C   E',
-                style: GoogleFonts.poppins(
-                    color: HexColor("FA163F"), fontSize: 23,fontWeight: FontWeight.bold),
+              child: Column(
+                children: [
+                  Text(
+                    'I   C   E',
+                    style: GoogleFonts.poppins(
+                        color: HexColor("FA163F"),
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'In Case of Emergency',
+                    style: GoogleFonts.poppins(
+                        color: HexColor("FA163F"),
+                        fontSize: 23,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             )
           ],

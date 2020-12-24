@@ -1,4 +1,5 @@
 import 'package:customer_app/map.dart';
+import 'package:customer_app/screens/realTimeMapScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -104,8 +105,8 @@ class _ProfileState extends State<Profile> {
             color: Color(0xff75DA8B),
             child: Text('Track the driver'),
             onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => MapView()));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>MapPage()));
+              
             })
       ]),
     );

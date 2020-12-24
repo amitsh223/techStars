@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:location/location.dart';
+import 'package:latlong/latlong.dart' as ll;
+import 'package:map_launcher/map_launcher.dart';
 
 Location location = new Location();
 
@@ -33,8 +36,13 @@ class _HomeState extends State<Home> {
         hospitals = [];
         snapShot.forEach((key, value) {
           if (value['AproveStatus'])
-            hospitals
-                .add(Hospital(id: key, lat: value['lat'], long: value['long']));
+            hospitals.add(Hospital(
+                contact: value['Contact No'] ?? '',
+                id: key,
+                lat: value['lat'],
+                long: value['long'],
+                address: value['HospitalAddress'] ?? '',
+                name: value['HospialName'] ?? ''));
         });
       }
     });
@@ -53,9 +61,9 @@ class _HomeState extends State<Home> {
       isLoading = true;
     });
     _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
+    if (_permissionGranted == PermissionStatus.DENIED) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+      if (_permissionGranted != PermissionStatus.GRANTED) {
         return;
       }
     }
@@ -66,7 +74,8 @@ class _HomeState extends State<Home> {
       await FirebaseDatabase.instance
           .reference()
           .child('AdminAccess')
-          .child(hospitals.first.id)
+          .child(nearestHospital.id)
+          .child('Requests')
           .child(id)
           .update(
         {
@@ -82,7 +91,8 @@ class _HomeState extends State<Home> {
       final ref = FirebaseDatabase.instance
           .reference()
           .child('AdminAccess')
-          .child(hospitals.first.id)
+          .child(nearestHospital.id)
+          .child('Requests')
           .child(id)
           .onValue;
       ref.listen((event) {
@@ -134,18 +144,71 @@ class _HomeState extends State<Home> {
     });
   }
 
+  getNearestHospital() {
+    double min = 1000000;
+    hospitals.forEach((element) {
+      double dis = distanceFinder(element.lat, element.long,
+          _locationData.latitude, _locationData.longitude);
+      if (min > dis) {
+        min = dis;
+        nearestHospital = Hospital(
+            name: element.name,
+            address: element.address,
+            contact: element.contact,
+            id: element.id,
+            lat: element.lat,
+            long: element.long);
+      }
+    });
+  }
+
+  Hospital nearestHospital;
+
   @override
   void initState() {
     getAlldata();
+    getLocation();
+    Future.delayed(Duration(seconds: 3)).then((value) {
+      getNearestHospital();
+    });
     super.initState();
   }
 
+  getLocation() async {
+    _locationData = await location.getLocation();
+  }
+
+  double distanceFinder(var hLat, var hLong, var cLat, var cLong) {
+    ll.DistanceHaversine distance = ll.DistanceHaversine();
+    double distanc = distance.as(
+      ll.LengthUnit.Kilometer,
+      ll.LatLng(hLat, hLong),
+      ll.LatLng(cLat, cLong),
+    );
+    return distanc;
+  }
+
+  int currIndex = 0;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currIndex,
+          onTap: (x) {
+            setState(() {
+              currIndex = x;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.location_on), label: 'Near BY')
+          ],
+        ),
         appBar: AppBar(
-          title: Text('Need Help'),
+          elevation: currIndex == 0 ? 2 : 0,
+          title: currIndex == 0 ? Text('Need Help') : Text('Near by'),
           centerTitle: true,
           backgroundColor: Colors.red,
           actions: [
@@ -173,29 +236,148 @@ class _HomeState extends State<Home> {
                   )
                 ],
               )
-            : Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    height: 50,
-                    width: 200,
-                    child: RaisedButton(
-                      child: Text(
-                        'Alert',
-                        style: TextStyle(fontSize: 20),
+            : currIndex == 0
+                ? Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(400),
+                      clipBehavior: Clip.antiAlias,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(200),
+                        ),
+                        height: 200,
+                        width: 200,
+                        child: RaisedButton(
+                          child: Text(
+                            'Emergency',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          textColor: Colors.white,
+                          onPressed: () {
+                            getLocationWithPermission();
+                          },
+                          color: Colors.red,
+                        ),
                       ),
-                      textColor: Colors.white,
-                      onPressed: () {
-                        getLocationWithPermission();
-                      },
-                      color: Colors.red,
                     ),
-                  ),
-                ),
-              ),
+                  )
+                : ListView.builder(
+                    itemCount: hospitals.length,
+                    itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Card(
+                            child: ListTile(
+                              title: Text(
+                                hospitals[index].name,
+                                style: GoogleFonts.actor(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                  'Distance :-  ${distanceFinder(_locationData.latitude, _locationData.longitude, hospitals[index].lat, hospitals[index].long)} km'),
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/profile.jpg'),
+                              ),
+                              trailing: Container(
+                                width: MediaQuery.of(context).size.width * .2,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        String id;
+                                        FirebaseAuth.instance
+                                            .currentUser()
+                                            .then((value) async {
+                                          id = value.uid;
+                                          _locationData =
+                                              await location.getLocation();
+                                          await FirebaseDatabase.instance
+                                              .reference()
+                                              .child('AdminAccess')
+                                              .child(hospitals[index].id)
+                                              .child('Requests')
+                                              .child(id)
+                                              .update(
+                                            {
+                                              'id': id,
+                                              'Alert': true,
+                                              "lat": _locationData.latitude,
+                                              'long': _locationData.longitude,
+                                              'Status': 'Pending',
+                                              "Phone no": '8630598001'
+                                            },
+                                          );
+                                        }).then((value) {
+                                          final ref = FirebaseDatabase.instance
+                                              .reference()
+                                              .child('AdminAccess')
+                                              .child(hospitals[index].id)
+                                              .child('Requests')
+                                              .child(id)
+                                              .onValue;
+                                          ref.listen((event) {
+                                            final response =
+                                                event.snapshot.value;
+                                            if (response == null) return;
+
+                                            if (response['Status'] ==
+                                                'Accepted') {
+                                              Fluttertoast.showToast(
+                                                  backgroundColor: Colors.red
+                                                      .withOpacity(0.51),
+                                                  msg:
+                                                      'Request is  accepted  Please wait for Ambulance ');
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Profile()));
+                                              setState(() {
+                                                isLoading = false;
+                                              });
+                                            }
+                                            // } else if (response['Status'] == 'Pending') {
+                                            //   Fluttertoast.showToast(msg: 'Please wait for the request to approved');
+                                            // } else {
+                                            //   return;
+                                            // }
+                                          });
+                                        });
+                                      },
+                                      child: Icon(
+                                        Icons.send_to_mobile,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        if (await MapLauncher.isMapAvailable(
+                                            MapType.google)) {
+                                          await MapLauncher.showMarker(
+                                            mapType: MapType.google,
+                                            coords: Coords(hospitals[index].lat,
+                                                hospitals[index].long),
+                                            title: hospitals[index].name,
+                                            description:
+                                                hospitals[index].contact,
+                                          );
+                                        }
+                                      },
+                                      child: Icon(
+                                        Icons.directions,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        )),
       ),
     );
   }

@@ -24,20 +24,22 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.12.2
-  location: ^3.0.0
+  location: ^2.5.4
   flutter_spinkit: ^4.1.2+1
   firebase_database:
   fluttertoast: ^7.1.1
   flutter_rating_bar: ^3.0.1+1
   google_maps_flutter: ^0.5.33
   geolocator: ^5.3.1
-  flutter_polyline_points: ^0.2.1
   url_launcher: ^5.7.2
   firebase_auth: ^0.15.2
   provider: ^4.3.2+2
   uuid: ^2.2.2
   hexcolor: ^1.0.6
   google_fonts: ^1.1.0
+  flutter_polyline_points: ^0.1.0
+  latlong: ^0.6.1
+  map_launcher: ^1.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -64,6 +66,11 @@ flutter:
     - assets/profile.jpg
     - assets/logo.png
     - assets/pie.png
+    - assets/destination_map_marker.png
+    - assets/driving_pin.png
+    - assets/friend1.jpg
+    - assets/friend2.jpg
+    - assets/driver.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

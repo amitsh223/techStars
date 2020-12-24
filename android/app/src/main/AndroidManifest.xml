@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.customer_app">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -9,8 +11,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="customer_app"
         android:icon="@mipmap/ic_launcher">
-        <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyArIhGus_tAKAVT4mUlqaZvShIeWwNO3AA"/>
+         <meta-data android:name="com.google.android.geo.API_KEY" android:value="ApiKey"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
